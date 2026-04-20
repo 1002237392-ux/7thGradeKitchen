@@ -4,231 +4,698 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>كتيب وصفات السابع ج</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fcfcfc;
-            margin: 0; padding: 0;
-            color: #333;
+        :root {
+            --red:    #ff595e;
+            --yellow: #ffca3a;
+            --green:  #8ac926;
+            --blue:   #1982c4;
+            --purple: #6a4c93;
+            --orange: #ff924c;
+            --dark-purple: #4a148c;
+            --text: #333;
+            --bg: #fcfcfc;
         }
 
-        /* رأس الصفحة */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
         .header {
             text-align: center;
-            padding: 30px;
+            padding: 28px 20px 22px;
             background: white;
-            /* خط قوس قزح رقيق ومتدرج */
-            border-bottom: 4px solid;
-            border-image: linear-gradient(to left, #ff595e, #ffca3a, #8ac926, #1982c4, #6a4c93, #ff924c) 1;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-bottom: 5px solid;
+            border-image: linear-gradient(to left, var(--red), var(--yellow), var(--green), var(--blue), var(--purple), var(--orange)) 1;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
         }
-        .logo { max-width: 90px; margin-bottom: 10px; }
-        
-        /* العنوان باللون الليلكي الغامق */
-        .title { 
-            font-size: 2.3em; 
-            color: #4a148c; /* ليلكي غامق فخم */
-            margin: 10px 0; 
-            font-weight: bold;
-        }
-        
-        .message { font-size: 1.1em; color: #636e72; line-height: 1.6; max-width: 700px; margin: auto; font-style: italic; }
-        .signature { display: block; margin-top: 10px; font-weight: bold; color: #d63031; }
 
-        /* حاوية الأزرار - ألوان قوس قزح */
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 12px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 3px solid #f3e5f5;
+            box-shadow: 0 4px 12px rgba(74,20,140,0.15);
+            background: white;
+        }
+
+        .logo-fallback {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--dark-purple));
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            border: 3px solid #f3e5f5;
+            box-shadow: 0 4px 12px rgba(74,20,140,0.15);
+            flex-shrink: 0;
+        }
+
+        .title {
+            font-size: clamp(1.3em, 3.5vw, 2.1em);
+            color: var(--dark-purple);
+            font-weight: 900;
+            line-height: 1.35;
+        }
+
+        .message {
+            font-size: clamp(0.85em, 2vw, 1em);
+            color: #636e72;
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 0 auto;
+            font-style: italic;
+        }
+
+        .signature {
+            display: inline-block;
+            margin-top: 8px;
+            font-weight: 700;
+            color: var(--red);
+            font-style: normal;
+        }
+
+        .counter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .counter-chip {
+            background: linear-gradient(135deg, var(--dark-purple), var(--purple));
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.88em;
+            font-weight: 700;
+            box-shadow: 0 3px 8px rgba(74,20,140,0.25);
+        }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            max-width: 980px;
+            margin: 22px auto 0;
+            padding: 0 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-wrap {
+            flex: 1;
+            min-width: 210px;
+            position: relative;
+        }
+
+        .search-wrap .icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.05em;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 11px 42px 11px 18px;
+            border: 2px solid #e8e0f0;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95em;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+            color: var(--text);
+        }
+
+        .search-input:focus {
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(106,76,147,0.12);
+        }
+
+        .filter-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 9px 18px;
+            border: 2px solid #e0d6f0;
+            border-radius: 50px;
+            background: white;
+            color: #666;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.88em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--dark-purple);
+            border-color: var(--dark-purple);
+            color: white;
+        }
+
+        /* ===== GRID ===== */
         .container {
             max-width: 1100px;
-            margin: 40px auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
+            margin: 22px auto 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 18px;
+            padding: 0 20px;
         }
 
         .recipe-btn {
-            width: 230px;
-            height: 130px;
             border: none;
             border-radius: 20px;
             color: white;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.25s, box-shadow 0.25s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            padding: 0;
+            text-align: center;
+            overflow: hidden;
+            min-height: 165px;
+            position: relative;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .recipe-btn:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+        }
+
+        .recipe-btn.hidden { display: none; }
+
+        .btn-bg-color {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .btn-img-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .btn-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.45s;
+        }
+
+        .btn-img.loaded { opacity: 1; }
+
+        .btn-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.08) 55%, transparent 100%);
+            z-index: 2;
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 3;
+            padding: 12px 12px 14px;
+            width: 100%;
+        }
+
+        .v-name {
+            font-size: clamp(0.9em, 2.2vw, 1.1em);
+            font-weight: 900;
+            display: block;
+            line-height: 1.3;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .s-name {
+            font-size: 0.8em;
+            opacity: 0.9;
+            font-weight: 500;
+            display: block;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+
+        .cat-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.22);
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.74em;
+            margin-bottom: 5px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .recipe-btn:nth-child(6n+1) .btn-bg-color { background: var(--red); }
+        .recipe-btn:nth-child(6n+2) .btn-bg-color { background: var(--yellow); }
+        .recipe-btn:nth-child(6n+3) .btn-bg-color { background: var(--green); }
+        .recipe-btn:nth-child(6n+4) .btn-bg-color { background: var(--blue); }
+        .recipe-btn:nth-child(6n+5) .btn-bg-color { background: var(--purple); }
+        .recipe-btn:nth-child(6n+6) .btn-bg-color { background: var(--orange); }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+            color: #aaa;
+            font-size: 1.1em;
+            display: none;
+        }
+        .no-results.show { display: block; }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(6px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-content {
+            background: white;
+            margin: 3vh auto;
+            padding: 0;
+            border-radius: 28px;
+            width: 92%;
+            max-width: 640px;
+            max-height: 92vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            animation: slideUp 0.28s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+
+        .modal-content::-webkit-scrollbar { width: 5px; }
+        .modal-content::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+
+        .close-btn {
+            position: absolute;
+            top: 13px;
+            left: 13px;
+            width: 38px;
+            height: 38px;
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: white;
+            z-index: 10;
+            transition: background 0.2s;
+            border: none;
+            font-family: sans-serif;
+        }
+        .close-btn:hover { background: var(--red); }
+
+        .modal-img-wrap {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            background: linear-gradient(135deg, var(--purple), var(--dark-purple));
+            border-radius: 28px 28px 0 0;
+            overflow: hidden;
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.45s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .recipe-img.loaded { opacity: 1; }
+
+        .img-placeholder {
+            position: absolute;
+            inset: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-            padding: 15px;
+            color: rgba(255,255,255,0.75);
+            font-size: 3em;
+            gap: 8px;
+            z-index: 0;
+        }
+
+        .img-placeholder span {
+            font-size: 0.32em;
+            font-family: 'Cairo', sans-serif;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .modal-body { padding: 20px 22px 28px; }
+
+        .modal-title {
+            color: var(--dark-purple);
             text-align: center;
+            font-size: clamp(1.4em, 4vw, 2em);
+            font-weight: 900;
+            margin-bottom: 14px;
+            line-height: 1.3;
         }
 
-        .recipe-btn:hover { transform: scale(1.08); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        .recipe-btn .v-name { font-size: 1.4em; margin-bottom: 8px; line-height: 1.2; }
-        .recipe-btn .s-name { font-size: 0.95em; opacity: 0.95; font-weight: normal; }
-
-        /* توزيع ألوان قوس قزح المبهجة على الأزرار بالتناوب */
-        .recipe-btn:nth-child(6n+1) { background: #ff595e; } /* أحمر مبهج */
-        .recipe-btn:nth-child(6n+2) { background: #ffca3a; } /* أصفر ذهبي */
-        .recipe-btn:nth-child(6n+3) { background: #8ac926; } /* أخضر عشبي */
-        .recipe-btn:nth-child(6n+4) { background: #1982c4; } /* أزرق سماوي */
-        .recipe-btn:nth-child(6n+5) { background: #6a4c93; } /* بنفسجي ليلكي */
-        .recipe-btn:nth-child(6n+6) { background: #ff924c; } /* برتقالي دافئ */
-
-        /* النافذة المنبثقة لعرض الوصفة الكلي */
-        .modal {
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background: white; margin: 3vh auto; padding: 25px; border-radius: 25px;
-            width: 90%; max-width: 650px; max-height: 90vh; overflow-y: auto; position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .close-btn { position: absolute; top: 15px; left: 20px; font-size: 30px; cursor: pointer; color: #636e72; transition: 0.2s; }
-        .close-btn:hover { color: #ff595e; }
-        
-        .recipe-img { 
-            width: 100%; 
-            height: 300px; 
-            object-fit: cover; 
-            border-radius: 20px; 
-            margin-bottom: 15px; 
-            border: 2px solid #eee;
-        }
-        
-        .modal-title { color: #4a148c; text-align: center; font-size: 2.2em; margin: 10px 0; }
-        
-        /* صندوق تفاصيل أنيق ومدمج في الأعلى */
-        .details-box { 
-            background: #fdfaf5; 
-            padding: 10px 15px; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            display: flex; 
-            justify-content: space-around; 
-            font-size: 0.95em; 
+        .details-box {
+            background: #fdfaf5;
+            padding: 12px 16px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.9em;
             border: 1px solid #f3e5f5;
             color: #555;
         }
+
         .details-box b { color: #333; }
 
-        .section-h { 
-            border-right: 4px solid #8ac926; 
-            padding-right: 12px; 
-            color: #1982c4; 
-            margin-top: 25px; 
-            font-size: 1.4em;
+        .section-h {
+            border-right: 4px solid var(--green);
+            padding-right: 12px;
+            color: var(--blue);
+            margin-top: 22px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
         }
-        
-        .text-p { 
-            line-height: 1.9; 
-            white-space: pre-wrap; /* للحفاظ على تنسيق الأسطر */
-            background: #fff; 
-            padding: 15px; 
-            border: 1px solid #f0f0f0; 
-            border-radius: 12px; 
-            font-size: 1.1em;
+
+        .text-p {
+            line-height: 1.95;
+            white-space: pre-wrap;
+            background: #fafafa;
+            padding: 14px 16px;
+            border: 1px solid #f0f0f0;
+            border-radius: 14px;
+            font-size: 1em;
             color: #444;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 600px) {
+            .header-top { flex-direction: column; gap: 10px; }
+            .title { font-size: 1.15em; }
+            .container { grid-template-columns: repeat(2, 1fr); gap: 11px; padding: 0 12px; }
+            .recipe-btn { min-height: 130px; }
+            .controls { flex-direction: column; padding: 0 12px; }
+            .search-wrap { min-width: unset; }
+            .modal-content { width: 97%; margin: 1.5vh auto; }
+            .modal-img-wrap { height: 190px; }
+            .details-box { flex-direction: column; gap: 5px; }
+            .modal-body { padding: 16px 16px 24px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <img src="https://i.postimg.cc/26jnR4Q1/sml-byt-hspr.png" class="logo" alt="شعار المدرسة">
-        <h1 class="title">من قلب بيوتنا لقلب صفنا: عيلة السابع ج بتطبخ سوا</h1>
-        <p class="message">
-            "بين ثنايا هذه الوصفات، نكهة حب لا تنتهي.. فخورة بأنني بينكم، أجمع نكهات إبداعكم لنبقى دوماً عائلة السابع ج القريبة من القلب."
-            <span class="signature">— محبتكم: منى مصطفى</span>
-        </p>
+<div class="header">
+    <div class="header-top">
+        <img
+            id="schoolLogo"
+            src="https://i.postimg.cc/26jnR4Q1/sml-byt-hspr.png"
+            class="logo"
+            alt="شعار المدرسة"
+            onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
+        >
+        <div id="logoFallback" class="logo-fallback">🏫</div>
+        <h1 class="title">من قلب بيوتنا لقلب صفنا<br>عيلة السابع ج بتطبخ سوا 🌈</h1>
     </div>
+    <p class="message">
+        "بين ثنايا هذه الوصفات، نكهة حب لا تنتهي.. فخورة بأنني بينكم، أجمع نكهات إبداعكم لنبقى دوماً عائلة السابع ج القريبة من القلب."
+        <span class="signature">— محبتكم: منى مصطفى</span>
+    </p>
+    <div class="counter-bar">
+        <span class="counter-chip" id="totalCount">📖 عدد الوصفات: 0</span>
+        <span class="counter-chip" id="shownCount" style="display:none;">🔍 النتائج: 0</span>
+    </div>
+</div>
 
-    <div class="container" id="buttons-grid">
+<!-- بحث وفلتر -->
+<div class="controls">
+    <div class="search-wrap">
+        <span class="icon">🔍</span>
+        <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="ابحثي عن وصفة أو اسم طالبة..."
+            oninput="filterRecipes()"
+        >
+    </div>
+    <div class="filter-btns" id="filterBtns"></div>
+</div>
+
+<!-- شبكة الوصفات -->
+<div class="container" id="buttons-grid">
+    <div class="no-results" id="noResults">😔 لا توجد وصفات تطابق بحثك</div>
+</div>
+
+<!-- المودال -->
+<div id="recipeModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">✕</button>
+
+        <div class="modal-img-wrap">
+            <div class="img-placeholder" id="mImgPlaceholder">
+                🍽️<span id="mImgMsg">جاري تحميل الصورة...</span>
+            </div>
+            <img
+                id="mImg"
+                class="recipe-img"
+                src=""
+                alt="صورة الوصفة"
+                onload="this.classList.add('loaded'); document.getElementById('mImgPlaceholder').style.display='none';"
+                onerror="this.style.display='none'; document.getElementById('mImgMsg').textContent='لا توجد صورة متاحة';"
+            >
         </div>
 
-    <div id="recipeModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            
-            <img id="mImg" class="recipe-img" src="" onerror="this.src='https://via.placeholder.com/600x300?text=جاري+تحميل+الصورة...'">
-            
+        <div class="modal-body">
             <h2 id="mTitle" class="modal-title"></h2>
-            
             <div class="details-box">
                 <span>👤 الطالب: <b id="mStudent"></b></span>
                 <span>📂 الفئة: <b id="mCat"></b></span>
                 <span>🏠 المصدر: <b id="mSrc"></b></span>
             </div>
-            
             <h3 class="section-h">🛒 المكونات</h3>
             <div id="mIng" class="text-p"></div>
-            
             <h3 class="section-h">🍳 طريقة التحضير</h3>
             <div id="mPrep" class="text-p"></div>
         </div>
     </div>
+</div>
 
-    <script>
-        // مصفوفة البيانات: تحتوي على الوصفات الكاملة والمنظمة
-        const recipes = [
-            {
-                student: "منى مصطفى",
-                title: "كيكة التيراليتشي التركية",
-                cat: "حلوى",
-                src: "صديقة",
-                // النص الكامل والمنظم للمكونات
-                ing: `الطبقة الاولى:\n٤ بيض، كاس سكر، كاس ونص طحين، ٢ بيكنج باودر، ملعقة فانيل سائل مركز (مهم يكون مركز).\n\nالتقطير:\nلتر حليب، علبة كريمة حلوة للخفق، نص كاس سكر، ملعقة فانيل سائل مركز.\n\nطبقة الكريمة:\nعلبة كريمة حلوة للخفق، ٥ ملاعق بودينج فانيل، ٣ ملاعق سكر.\n\nالطبقة الاخيرة:\nكراميل جاهز (من محلات ادوات الحلويات).`,
-                // النص الكامل والمنظم لطريقة التحضير
-                prep: `1. الطبقة الاولى: نخفق البيض والسكر والفانيل لحد ما البيض يتكاثف، بنخل فوقه الطحين والبيكنج باودر وبنقلبهن بملعقة الكعك. بنسكبهن في صينية الفرن وبنخبزهن بحرارة 180 (بكون الفرن محمى من قبل).\n\n2. التشريبة: بنحرك المواد مع بعض، بس تطلع الكعكة من الفرن وهي سخنة بنخشها بشوكة وبنعمل فيها ثقوب وبنشربها التشريبة.\n\n3. طبقة الكريمة: بنخفق المواد مع بعض وبنحطهن فوق الاسفنجة.\n\n4. طبقة الكراميل: كراميل جاهز بنذوبه بشوي مي مغلية لحد ما يصير سهل نسكبه، ونسكبه فوق طبقة الكريماوميرور ابيض للتخطيط.\nوصحة وعافية 🙏🥰`,
-                // رابط الصورة المعدل (سيعمل بمجرد فتح الصلاحيات في درايف)
-                img: "https://drive.google.com/uc?export=view&id=1TAa_dPqSfwj4V1pWI2NXPX6dkUvYZZxU"
-            }
-            
-            // قالب إضافة وصفة جديدة لطالب آخر:
-            // ,
-            // {
-            //     student: "اسم الطالب/ة",
-            //     title: "اسم الوصفة",
-            //     cat: "التصنيف",
-            //     src: "المصدر",
-            //     ing: "انسخي المكونات الكاملة هنا...",
-            //     prep: "انسخي طريقة التحضير الكاملة هنا...",
-            //     img: "رابط الصورة من درايف (بعد فتح الصلاحية)"
-            // }
-        ];
+<script>
+    // ─── تحويل روابط Google Drive لروابط Thumbnail مباشرة ───
+    function fixDriveUrl(url) {
+        if (!url) return '';
+        // /file/d/ID/view أو /d/ID/
+        let m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+        if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+        // uc?export=view&id=ID  أو  open?id=ID
+        m = url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+        if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+        // الرابط ليس Drive → أعده كما هو
+        return url;
+    }
 
-        const grid = document.getElementById('buttons-grid');
-        
-        // بناء الأزرار بالألوان المتناوبة
-        recipes.forEach((r, i) => {
+    // ─── بيانات الوصفات ───────────────────────────────────────
+    const recipes = [
+        {
+            student: "منى مصطفى",
+            title: "كيكة التيراليتشي التركية",
+            cat: "حلوى",
+            src: "صديقة",
+            ing: `الطبقة الاولى:\n٤ بيض، كاس سكر، كاس ونص طحين، ٢ بيكنج باودر، ملعقة فانيل سائل مركز (مهم يكون مركز).\n\nالتقطير:\nلتر حليب، علبة كريمة حلوة للخفق، نص كاس سكر، ملعقة فانيل سائل مركز.\n\nطبقة الكريمة:\nعلبة كريمة حلوة للخفق، ٥ ملاعق بودينج فانيل، ٣ ملاعق سكر.\n\nالطبقة الاخيرة:\nكراميل جاهز (من محلات ادوات الحلويات).`,
+            prep: `1. الطبقة الاولى: نخفق البيض والسكر والفانيل لحد ما البيض يتكاثف، بنخل فوقه الطحين والبيكنج باودر وبنقلبهن بملعقة الكعك. بنسكبهن في صينية الفرن وبنخبزهن بحرارة 180 (بكون الفرن محمى من قبل).\n\n2. التشريبة: بنحرك المواد مع بعض، بس تطلع الكعكة من الفرن وهي سخنة بنخشها بشوكة وبنعمل فيها ثقوب وبنشربها التشريبة.\n\n3. طبقة الكريمة: بنخفق المواد مع بعض وبنحطهن فوق الاسفنجة.\n\n4. طبقة الكراميل: كراميل جاهز بنذوبه بشوي مي مغلية لحد ما يصير سهل نسكبه، ونسكبه فوق طبقة الكريما وميرور ابيض للتخطيط.\nوصحة وعافية 🙏🥰`,
+            img: "https://drive.google.com/uc?export=view&id=1TAa_dPqSfwj4V1pWI2NXPX6dkUvYZZxU"
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 📌 لإضافة وصفة جديدة، انسخي هذا القالب وعدّليه:
+        // ,{
+        //     student: "اسم الطالبة",
+        //     title: "اسم الوصفة",
+        //     cat: "حلوى",      // طبق رئيسي / سلطة / مشروبات / خبز / ...
+        //     src: "أمي",
+        //     ing: `المكونات هنا...`,
+        //     prep: `طريقة التحضير هنا...`,
+        //     img: "رابط الصورة من Drive أو postimg"
+        // }
+        // ─────────────────────────────────────────────────────
+    ];
+
+    // ─── بناء أزرار الفلتر ────────────────────────────────────
+    let activeFilter = 'الكل';
+
+    function buildFilters() {
+        const cats = ['الكل', ...new Set(recipes.map(r => r.cat))];
+        const wrap = document.getElementById('filterBtns');
+        wrap.innerHTML = '';
+        cats.forEach(c => {
             const b = document.createElement('button');
-            b.className = 'recipe-btn';
-            // تنسيق نص الزر: اسم الوصفة ثم الطالب
-            b.innerHTML = `<span class="v-name">${r.title}</span><span class="s-name">إعداد: ${r.student}</span>`;
-            
-            // عند الضغط على الزر، تفتح البطاقة المنبثقة بالبيانات الكاملة
-            b.onclick = () => {
-                document.getElementById('mTitle').innerText = r.title;
-                document.getElementById('mStudent').innerText = r.student;
-                document.getElementById('mCat').innerText = r.cat;
-                document.getElementById('mSrc').innerText = r.src;
-                document.getElementById('mIng').innerText = r.ing;
-                document.getElementById('mPrep').innerText = r.prep;
-                document.getElementById('mImg').src = r.img; // سيتم تحميل الصورة
-                document.getElementById('recipeModal').style.display = 'block';
-            };
-            grid.appendChild(b);
+            b.className = 'filter-btn' + (c === 'الكل' ? ' active' : '');
+            b.dataset.cat = c;
+            b.textContent = c;
+            b.onclick = () => setFilter(b);
+            wrap.appendChild(b);
+        });
+    }
+
+    function setFilter(btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.cat;
+        filterRecipes();
+    }
+
+    // ─── بحث وفلتر ────────────────────────────────────────────
+    function filterRecipes() {
+        const q = document.getElementById('searchInput').value.trim().toLowerCase();
+        const btns = document.querySelectorAll('.recipe-btn');
+        let shown = 0;
+
+        btns.forEach((btn, i) => {
+            const r = recipes[i];
+            const matchCat    = activeFilter === 'الكل' || r.cat === activeFilter;
+            const matchSearch = !q ||
+                r.title.toLowerCase().includes(q) ||
+                r.student.toLowerCase().includes(q) ||
+                r.cat.toLowerCase().includes(q);
+
+            if (matchCat && matchSearch) { btn.classList.remove('hidden'); shown++; }
+            else                         { btn.classList.add('hidden'); }
         });
 
-        // دالة إغلاق النافذة
-        function closeModal() { document.getElementById('recipeModal').style.display = 'none'; }
-        
-        // إغلاق النافذة عند الضغط خارج محتوى البطاقة
-        window.onclick = (e) => { if(e.target.className == 'modal') closeModal(); }
-    </script>
+        document.getElementById('noResults').classList.toggle('show', shown === 0);
+        const chip = document.getElementById('shownCount');
+        if (q || activeFilter !== 'الكل') {
+            chip.style.display = 'inline-block';
+            chip.textContent = `🔍 النتائج: ${shown}`;
+        } else {
+            chip.style.display = 'none';
+        }
+    }
+
+    // ─── بناء شبكة البطاقات ───────────────────────────────────
+    function buildGrid() {
+        const grid  = document.getElementById('buttons-grid');
+        const noRes = document.getElementById('noResults');
+
+        recipes.forEach(r => {
+            const fixedImg = fixDriveUrl(r.img);
+            const btn = document.createElement('button');
+            btn.className = 'recipe-btn';
+            btn.setAttribute('aria-label', r.title);
+
+            btn.innerHTML = `
+                <div class="btn-bg-color"></div>
+                <div class="btn-img-wrap">
+                    <img class="btn-img" src="${fixedImg}" alt="${r.title}"
+                        onload="this.classList.add('loaded');"
+                        onerror="this.style.display='none';">
+                </div>
+                <div class="btn-overlay"></div>
+                <div class="btn-text">
+                    <span class="cat-badge">${r.cat}</span>
+                    <span class="v-name">${r.title}</span>
+                    <span class="s-name">✍️ ${r.student}</span>
+                </div>`;
+
+            btn.onclick = () => openModal(r, fixedImg);
+            grid.insertBefore(btn, noRes);
+        });
+
+        document.getElementById('totalCount').textContent = `📖 عدد الوصفات: ${recipes.length}`;
+    }
+
+    // ─── فتح المودال ──────────────────────────────────────────
+    function openModal(r, fixedImg) {
+        const img = document.getElementById('mImg');
+        img.className = 'recipe-img';
+        img.style.display = 'block';
+        const ph = document.getElementById('mImgPlaceholder');
+        ph.style.display = 'flex';
+        document.getElementById('mImgMsg').textContent = 'جاري تحميل الصورة...';
+
+        document.getElementById('mTitle').textContent   = r.title;
+        document.getElementById('mStudent').textContent = r.student;
+        document.getElementById('mCat').textContent     = r.cat;
+        document.getElementById('mSrc').textContent     = r.src;
+        document.getElementById('mIng').textContent     = r.ing;
+        document.getElementById('mPrep').textContent    = r.prep;
+        img.src = fixedImg;
+
+        document.getElementById('recipeModal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('recipeModal').style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    window.onclick = e => { if (e.target.id === 'recipeModal') closeModal(); };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ─── تشغيل ────────────────────────────────────────────────
+    buildFilters();
+    buildGrid();
+</script>
 </body>
 </html>
