@@ -112,6 +112,46 @@
             box-shadow: 0 3px 8px rgba(74,20,140,0.25);
         }
 
+        /* ===== LOADING ===== */
+        .loading-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            gap: 16px;
+            color: var(--purple);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #e8d5f5;
+            border-top-color: var(--dark-purple);
+            border-radius: 50%;
+            animation: spin 0.85s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-wrap p {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--dark-purple);
+        }
+
+        .error-wrap {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            gap: 12px;
+            color: var(--red);
+            text-align: center;
+        }
+
+        .error-wrap p { font-size: 1em; font-weight: 600; max-width: 500px; line-height: 1.6; }
+
         /* ===== CONTROLS ===== */
         .controls {
             max-width: 980px;
@@ -481,13 +521,13 @@
         <span class="signature">— محبتكم: منى مصطفى</span>
     </p>
     <div class="counter-bar">
-        <span class="counter-chip" id="totalCount">📖 عدد الوصفات: 0</span>
+        <span class="counter-chip" id="totalCount">📖 جاري التحميل...</span>
         <span class="counter-chip" id="shownCount" style="display:none;">🔍 النتائج: 0</span>
     </div>
 </div>
 
 <!-- بحث وفلتر -->
-<div class="controls">
+<div class="controls" id="controlsWrap" style="display:none;">
     <div class="search-wrap">
         <span class="icon">🔍</span>
         <input
@@ -503,6 +543,15 @@
 
 <!-- شبكة الوصفات -->
 <div class="container" id="buttons-grid">
+    <!-- تحميل -->
+    <div class="loading-wrap" id="loadingWrap" style="grid-column:1/-1;">
+        <div class="spinner"></div>
+        <p>⏳ جاري تحميل الوصفات...</p>
+    </div>
+    <!-- خطأ -->
+    <div class="error-wrap" id="errorWrap" style="grid-column:1/-1;">
+        <p>😔 تعذّر تحميل الوصفات.<br>تأكدي من أن الـ Google Sheet مضبوط على "Anyone with the link can view" ثم أعيدي تحميل الصفحة.</p>
+    </div>
     <div class="no-results" id="noResults">😔 لا توجد وصفات تطابق بحثك</div>
 </div>
 
@@ -528,7 +577,7 @@
         <div class="modal-body">
             <h2 id="mTitle" class="modal-title"></h2>
             <div class="details-box">
-                <span>👤 الطالب: <b id="mStudent"></b></span>
+                <span>👤 الطالبة: <b id="mStudent"></b></span>
                 <span>📂 الفئة: <b id="mCat"></b></span>
                 <span>🏠 المصدر: <b id="mSrc"></b></span>
             </div>
@@ -541,48 +590,75 @@
 </div>
 
 <script>
-    // ─── تحويل روابط Google Drive لروابط Thumbnail مباشرة ───
+    // ─── إعدادات Google Sheets ────────────────────────────────
+    const SHEET_ID  = '1W9Ib8bWjS6NeTuIEQLqhF_7oagQhJV4TqFJNUhjzPj8';
+    const SHEET_NAME = 'Form_Responses';
+    const SHEET_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+    // ─── تحويل روابط Google Drive ─────────────────────────────
     function fixDriveUrl(url) {
         if (!url) return '';
-        // /file/d/ID/view أو /d/ID/
+        // رابط مشاركة صورة من Google Forms يكون بهذا الشكل:
+        // https://drive.google.com/open?id=XXX  أو  /file/d/XXX/view
         let m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
         if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-        // uc?export=view&id=ID  أو  open?id=ID
         m = url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
         if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
-        // الرابط ليس Drive → أعده كما هو
         return url;
     }
 
-    // ─── بيانات الوصفات ───────────────────────────────────────
-    const recipes = [
-        {
-            student: "منى مصطفى",
-            title: "كيكة التيراليتشي التركية",
-            cat: "حلوى",
-            src: "صديقة",
-            ing: `الطبقة الاولى:\n٤ بيض، كاس سكر، كاس ونص طحين، ٢ بيكنج باودر، ملعقة فانيل سائل مركز (مهم يكون مركز).\n\nالتقطير:\nلتر حليب، علبة كريمة حلوة للخفق، نص كاس سكر، ملعقة فانيل سائل مركز.\n\nطبقة الكريمة:\nعلبة كريمة حلوة للخفق، ٥ ملاعق بودينج فانيل، ٣ ملاعق سكر.\n\nالطبقة الاخيرة:\nكراميل جاهز (من محلات ادوات الحلويات).`,
-            prep: `1. الطبقة الاولى: نخفق البيض والسكر والفانيل لحد ما البيض يتكاثف، بنخل فوقه الطحين والبيكنج باودر وبنقلبهن بملعقة الكعك. بنسكبهن في صينية الفرن وبنخبزهن بحرارة 180 (بكون الفرن محمى من قبل).\n\n2. التشريبة: بنحرك المواد مع بعض، بس تطلع الكعكة من الفرن وهي سخنة بنخشها بشوكة وبنعمل فيها ثقوب وبنشربها التشريبة.\n\n3. طبقة الكريمة: بنخفق المواد مع بعض وبنحطهن فوق الاسفنجة.\n\n4. طبقة الكراميل: كراميل جاهز بنذوبه بشوي مي مغلية لحد ما يصير سهل نسكبه، ونسكبه فوق طبقة الكريما وميرور ابيض للتخطيط.\nوصحة وعافية 🙏🥰`,
-            img: "https://drive.google.com/uc?export=view&id=1TAa_dPqSfwj4V1pWI2NXPX6dkUvYZZxU"
-        }
-
-        // ─────────────────────────────────────────────────────
-        // 📌 لإضافة وصفة جديدة، انسخي هذا القالب وعدّليه:
-        // ,{
-        //     student: "اسم الطالبة",
-        //     title: "اسم الوصفة",
-        //     cat: "حلوى",      // طبق رئيسي / سلطة / مشروبات / خبز / ...
-        //     src: "أمي",
-        //     ing: `المكونات هنا...`,
-        //     prep: `طريقة التحضير هنا...`,
-        //     img: "رابط الصورة من Drive أو postimg"
-        // }
-        // ─────────────────────────────────────────────────────
-    ];
-
-    // ─── بناء أزرار الفلتر ────────────────────────────────────
+    let recipes = [];
     let activeFilter = 'الكل';
 
+    // ─── جلب البيانات من Google Sheets ───────────────────────
+    async function loadFromSheets() {
+        try {
+            const res  = await fetch(SHEET_URL);
+            const text = await res.text();
+
+            // إزالة google.visualization.Query.setResponse( ... );
+            const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
+            const rows = json.table.rows;
+
+            recipes = [];
+            rows.forEach(row => {
+                const cells = row.c;
+                // العمود A=0 Timestamp، B=1 اسم الطالبة، C=2 اسم الوصفة
+                // D=3 تصنيف، E=4 مصدر، F=5 مكونات، G=6 طريقة التحضير، H=7 صورة
+                const student = cells[1]?.v || '';
+                const title   = cells[2]?.v || '';
+                const cat     = cells[3]?.v || 'أخرى';
+                const src     = cells[4]?.v || '';
+                const ing     = cells[5]?.v || '';
+                const prep    = cells[6]?.v || '';
+                const img     = cells[7]?.v || '';
+
+                if (title) {   // تجاهل الصفوف الفارغة
+                    recipes.push({ student, title, cat, src, ing, prep, img });
+                }
+            });
+
+            document.getElementById('loadingWrap').style.display = 'none';
+
+            if (recipes.length === 0) {
+                document.getElementById('noResults').classList.add('show');
+                document.getElementById('totalCount').textContent = '📖 لا توجد وصفات بعد';
+                return;
+            }
+
+            document.getElementById('controlsWrap').style.display = 'flex';
+            buildFilters();
+            buildGrid();
+
+        } catch (e) {
+            console.error(e);
+            document.getElementById('loadingWrap').style.display = 'none';
+            document.getElementById('errorWrap').style.display = 'flex';
+            document.getElementById('totalCount').textContent = '⚠️ فشل التحميل';
+        }
+    }
+
+    // ─── بناء أزرار الفلتر ────────────────────────────────────
     function buildFilters() {
         const cats = ['الكل', ...new Set(recipes.map(r => r.cat))];
         const wrap = document.getElementById('filterBtns');
@@ -636,6 +712,9 @@
     function buildGrid() {
         const grid  = document.getElementById('buttons-grid');
         const noRes = document.getElementById('noResults');
+
+        // إزالة أي أزرار قديمة
+        document.querySelectorAll('.recipe-btn').forEach(b => b.remove());
 
         recipes.forEach(r => {
             const fixedImg = fixDriveUrl(r.img);
@@ -694,8 +773,7 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     // ─── تشغيل ────────────────────────────────────────────────
-    buildFilters();
-    buildGrid();
+    loadFromSheets();
 </script>
 </body>
 </html>
