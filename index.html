@@ -9,6 +9,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #fcfcfc;
             margin: 0; padding: 0;
+            color: #333;
         }
 
         /* رأس الصفحة */
@@ -16,11 +17,21 @@
             text-align: center;
             padding: 30px;
             background: white;
-            border-bottom: 8px solid #ffbe0b; /* لون ذهبي دافئ */
+            /* خط قوس قزح رقيق ومتدرج */
+            border-bottom: 4px solid;
+            border-image: linear-gradient(to left, #ff595e, #ffca3a, #8ac926, #1982c4, #6a4c93, #ff924c) 1;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-        .logo { max-width: 100px; margin-bottom: 10px; }
-        .title { font-size: 2.2em; color: #2d3436; margin: 10px 0; }
+        .logo { max-width: 90px; margin-bottom: 10px; }
+        
+        /* العنوان باللون الليلكي الغامق */
+        .title { 
+            font-size: 2.3em; 
+            color: #4a148c; /* ليلكي غامق فخم */
+            margin: 10px 0; 
+            font-weight: bold;
+        }
+        
         .message { font-size: 1.1em; color: #636e72; line-height: 1.6; max-width: 700px; margin: auto; font-style: italic; }
         .signature { display: block; margin-top: 10px; font-weight: bold; color: #d63031; }
 
@@ -36,8 +47,8 @@
         }
 
         .recipe-btn {
-            width: 220px;
-            height: 120px;
+            width: 230px;
+            height: 130px;
             border: none;
             border-radius: 20px;
             color: white;
@@ -49,41 +60,86 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            padding: 15px;
+            text-align: center;
         }
 
         .recipe-btn:hover { transform: scale(1.08); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        .recipe-btn .v-name { font-size: 1.3em; margin-bottom: 5px; }
-        .recipe-btn .s-name { font-size: 0.9em; opacity: 0.9; font-weight: normal; }
+        .recipe-btn .v-name { font-size: 1.4em; margin-bottom: 8px; line-height: 1.2; }
+        .recipe-btn .s-name { font-size: 0.95em; opacity: 0.95; font-weight: normal; }
 
-        /* توزيع ألوان قوس قزح على الأزرار بالترتيب */
-        .recipe-btn:nth-child(6n+1) { background: #ff595e; } /* أحمر */
-        .recipe-btn:nth-child(6n+2) { background: #ffca3a; } /* أصفر/برتقالي */
-        .recipe-btn:nth-child(6n+3) { background: #8ac926; } /* أخضر */
-        .recipe-btn:nth-child(6n+4) { background: #1982c4; } /* أزرق */
-        .recipe-btn:nth-child(6n+5) { background: #6a4c93; } /* بنفسجي */
-        .recipe-btn:nth-child(6n+6) { background: #ff924c; } /* برتقالي غامق */
+        /* توزيع ألوان قوس قزح المبهجة على الأزرار بالتناوب */
+        .recipe-btn:nth-child(6n+1) { background: #ff595e; } /* أحمر مبهج */
+        .recipe-btn:nth-child(6n+2) { background: #ffca3a; } /* أصفر ذهبي */
+        .recipe-btn:nth-child(6n+3) { background: #8ac926; } /* أخضر عشبي */
+        .recipe-btn:nth-child(6n+4) { background: #1982c4; } /* أزرق سماوي */
+        .recipe-btn:nth-child(6n+5) { background: #6a4c93; } /* بنفسجي ليلكي */
+        .recipe-btn:nth-child(6n+6) { background: #ff924c; } /* برتقالي دافئ */
 
-        /* النافذة المنبثقة */
+        /* النافذة المنبثقة لعرض الوصفة الكلي */
         .modal {
             display: none; position: fixed; z-index: 1000; left: 0; top: 0;
             width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
         }
+        
         .modal-content {
-            background: white; margin: 5vh auto; padding: 25px; border-radius: 25px;
-            width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; position: relative;
+            background: white; margin: 3vh auto; padding: 25px; border-radius: 25px;
+            width: 90%; max-width: 650px; max-height: 90vh; overflow-y: auto; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .close-btn { position: absolute; top: 15px; left: 20px; font-size: 30px; cursor: pointer; color: #636e72; }
-        .recipe-img { width: 100%; height: 350px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; }
-        .modal-title { color: #2d3436; text-align: center; font-size: 1.8em; margin: 10px 0; }
-        .details-box { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-around; font-size: 0.9em; }
-        .section-h { border-right: 4px solid #ffca3a; padding-right: 10px; color: #1982c4; margin-top: 20px; }
-        .text-p { line-height: 1.8; white-space: pre-wrap; background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 10px; }
+        
+        .close-btn { position: absolute; top: 15px; left: 20px; font-size: 30px; cursor: pointer; color: #636e72; transition: 0.2s; }
+        .close-btn:hover { color: #ff595e; }
+        
+        .recipe-img { 
+            width: 100%; 
+            height: 300px; 
+            object-fit: cover; 
+            border-radius: 20px; 
+            margin-bottom: 15px; 
+            border: 2px solid #eee;
+        }
+        
+        .modal-title { color: #4a148c; text-align: center; font-size: 2.2em; margin: 10px 0; }
+        
+        /* صندوق تفاصيل أنيق ومدمج في الأعلى */
+        .details-box { 
+            background: #fdfaf5; 
+            padding: 10px 15px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-around; 
+            font-size: 0.95em; 
+            border: 1px solid #f3e5f5;
+            color: #555;
+        }
+        .details-box b { color: #333; }
+
+        .section-h { 
+            border-right: 4px solid #8ac926; 
+            padding-right: 12px; 
+            color: #1982c4; 
+            margin-top: 25px; 
+            font-size: 1.4em;
+        }
+        
+        .text-p { 
+            line-height: 1.9; 
+            white-space: pre-wrap; /* للحفاظ على تنسيق الأسطر */
+            background: #fff; 
+            padding: 15px; 
+            border: 1px solid #f0f0f0; 
+            border-radius: 12px; 
+            font-size: 1.1em;
+            color: #444;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="https://i.postimg.cc/26jnR4Q1/sml-byt-hspr.png" class="logo">
+        <img src="https://i.postimg.cc/26jnR4Q1/sml-byt-hspr.png" class="logo" alt="شعار المدرسة">
         <h1 class="title">من قلب بيوتنا لقلب صفنا: عيلة السابع ج بتطبخ سوا</h1>
         <p class="message">
             "بين ثنايا هذه الوصفات، نكهة حب لا تنتهي.. فخورة بأنني بينكم، أجمع نكهات إبداعكم لنبقى دوماً عائلة السابع ج القريبة من القلب."
@@ -91,44 +147,70 @@
         </p>
     </div>
 
-    <div class="container" id="buttons-grid"></div>
+    <div class="container" id="buttons-grid">
+        </div>
 
     <div id="recipeModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <img id="mImg" class="recipe-img" src="" onerror="this.src='https://via.placeholder.com/400x300?text=جاري+تحميل+الصورة...'">
+            
+            <img id="mImg" class="recipe-img" src="" onerror="this.src='https://via.placeholder.com/600x300?text=جاري+تحميل+الصورة...'">
+            
             <h2 id="mTitle" class="modal-title"></h2>
+            
             <div class="details-box">
                 <span>👤 الطالب: <b id="mStudent"></b></span>
                 <span>📂 الفئة: <b id="mCat"></b></span>
                 <span>🏠 المصدر: <b id="mSrc"></b></span>
             </div>
-            <h3 class="section-h">المكونات</h3>
+            
+            <h3 class="section-h">🛒 المكونات</h3>
             <div id="mIng" class="text-p"></div>
-            <h3 class="section-h">طريقة التحضير</h3>
+            
+            <h3 class="section-h">🍳 طريقة التحضير</h3>
             <div id="mPrep" class="text-p"></div>
         </div>
     </div>
 
     <script>
+        // مصفوفة البيانات: تحتوي على الوصفات الكاملة والمنظمة
         const recipes = [
             {
                 student: "منى مصطفى",
-                title: "كيكة التيراليتشي",
+                title: "كيكة التيراليتشي التركية",
                 cat: "حلوى",
                 src: "صديقة",
-                ing: "٤ بيض، كاس سكر، كاس ونص طحين، بيكنج باودر، فانيل.\nللتقطير: لتر حليب، كريمة، سكر.\nللوجه: كراميل جاهز.",
-                prep: "1. نخفق البيض والسكر.\n2. نضيف الطحين ونخبز على 180 درجة.\n3. نشربها بالحليب وهي ساخنة.\n4. نضع الكريمة ثم الكراميل.",
-                // تم تعديل الرابط ليعمل مباشرة
+                // النص الكامل والمنظم للمكونات
+                ing: `الطبقة الاولى:\n٤ بيض، كاس سكر، كاس ونص طحين، ٢ بيكنج باودر، ملعقة فانيل سائل مركز (مهم يكون مركز).\n\nالتقطير:\nلتر حليب، علبة كريمة حلوة للخفق، نص كاس سكر، ملعقة فانيل سائل مركز.\n\nطبقة الكريمة:\nعلبة كريمة حلوة للخفق، ٥ ملاعق بودينج فانيل، ٣ ملاعق سكر.\n\nالطبقة الاخيرة:\nكراميل جاهز (من محلات ادوات الحلويات).`,
+                // النص الكامل والمنظم لطريقة التحضير
+                prep: `1. الطبقة الاولى: نخفق البيض والسكر والفانيل لحد ما البيض يتكاثف، بنخل فوقه الطحين والبيكنج باودر وبنقلبهن بملعقة الكعك. بنسكبهن في صينية الفرن وبنخبزهن بحرارة 180 (بكون الفرن محمى من قبل).\n\n2. التشريبة: بنحرك المواد مع بعض، بس تطلع الكعكة من الفرن وهي سخنة بنخشها بشوكة وبنعمل فيها ثقوب وبنشربها التشريبة.\n\n3. طبقة الكريمة: بنخفق المواد مع بعض وبنحطهن فوق الاسفنجة.\n\n4. طبقة الكراميل: كراميل جاهز بنذوبه بشوي مي مغلية لحد ما يصير سهل نسكبه، ونسكبه فوق طبقة الكريماوميرور ابيض للتخطيط.\nوصحة وعافية 🙏🥰`,
+                // رابط الصورة المعدل (سيعمل بمجرد فتح الصلاحيات في درايف)
                 img: "https://drive.google.com/uc?export=view&id=1TAa_dPqSfwj4V1pWI2NXPX6dkUvYZZxU"
             }
+            
+            // قالب إضافة وصفة جديدة لطالب آخر:
+            // ,
+            // {
+            //     student: "اسم الطالب/ة",
+            //     title: "اسم الوصفة",
+            //     cat: "التصنيف",
+            //     src: "المصدر",
+            //     ing: "انسخي المكونات الكاملة هنا...",
+            //     prep: "انسخي طريقة التحضير الكاملة هنا...",
+            //     img: "رابط الصورة من درايف (بعد فتح الصلاحية)"
+            // }
         ];
 
         const grid = document.getElementById('buttons-grid');
+        
+        // بناء الأزرار بالألوان المتناوبة
         recipes.forEach((r, i) => {
             const b = document.createElement('button');
             b.className = 'recipe-btn';
+            // تنسيق نص الزر: اسم الوصفة ثم الطالب
             b.innerHTML = `<span class="v-name">${r.title}</span><span class="s-name">إعداد: ${r.student}</span>`;
+            
+            // عند الضغط على الزر، تفتح البطاقة المنبثقة بالبيانات الكاملة
             b.onclick = () => {
                 document.getElementById('mTitle').innerText = r.title;
                 document.getElementById('mStudent').innerText = r.student;
@@ -136,13 +218,16 @@
                 document.getElementById('mSrc').innerText = r.src;
                 document.getElementById('mIng').innerText = r.ing;
                 document.getElementById('mPrep').innerText = r.prep;
-                document.getElementById('mImg').src = r.img;
+                document.getElementById('mImg').src = r.img; // سيتم تحميل الصورة
                 document.getElementById('recipeModal').style.display = 'block';
             };
             grid.appendChild(b);
         });
 
+        // دالة إغلاق النافذة
         function closeModal() { document.getElementById('recipeModal').style.display = 'none'; }
+        
+        // إغلاق النافذة عند الضغط خارج محتوى البطاقة
         window.onclick = (e) => { if(e.target.className == 'modal') closeModal(); }
     </script>
 </body>
